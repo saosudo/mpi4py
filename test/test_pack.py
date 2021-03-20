@@ -112,15 +112,21 @@ class TestPackExternal(BaseTestPackExternal, unittest.TestCase):
 
 
 name, version = MPI.get_vendor()
-if name =='MPICH' or name == 'MPICH2':
-    BaseTestPackExternal.skipdtype += ['l']
-    BaseTestPackExternal.skipdtype += ['d']
+if name == 'MPICH':
+    BaseTestPackExternal.skipdtype += ['l']  # XXX TODO
+    if version < (4, 0, 0):
+        BaseTestPackExternal.skipdtype += ['l']
+        BaseTestPackExternal.skipdtype += ['d']
 elif name == 'Intel MPI':
     BaseTestPackExternal.skipdtype += ['l']
     BaseTestPackExternal.skipdtype += ['d']
 elif name == 'MVAPICH2':
     BaseTestPackExternal.skipdtype += ['l']
     BaseTestPackExternal.skipdtype += ['d']
+elif name =='MPICH2':
+    BaseTestPackExternal.skipdtype += ['l']
+    BaseTestPackExternal.skipdtype += ['d']
+    pass
 else:
     try:
         MPI.BYTE.Pack_external_size(EXT32, 0)
